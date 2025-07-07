@@ -641,3 +641,61 @@ window.addEventListener('load', () => {
         }, 500);
     });
 });
+
+
+// Слоты из твоего списка
+const slotNames = allSlots.map(s => s.title);
+
+// Получаем tbody
+const statsTableBody = document.querySelector("#statsTable tbody");
+
+// Варианты ставок
+const betValues = [
+    10, 20, 50, 100, 200, 300, 400, 500,
+    750, 1000, 1500, 2000, 2500, 3000, 4000, 5000
+];
+
+// Функция генерации одной строки
+function generateRandomRow() {
+    // ID: первая цифра 7,8 или 9
+    const firstDigit = ["7", "8", "9"][Math.floor(Math.random() * 3)];
+    const id = firstDigit + Math.floor(10000000 + Math.random() * 8999999).toString();
+
+    // Случайный слот
+    const slot = slotNames[Math.floor(Math.random() * slotNames.length)];
+
+    // Спины от 20 до 60
+    const spins = Math.floor(Math.random() * 41) + 20;
+
+    // Случайная ставка из фиксированного списка
+    const bet = betValues[Math.floor(Math.random() * betValues.length)];
+
+    return { id, slot, spins, bet };
+}
+
+// Добавляем строку в таблицу
+function appendRow(rowData) {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+    <td>${rowData.id}</td>
+    <td>${rowData.slot}</td>
+    <td>${rowData.spins}</td>
+    <td>${rowData.bet} ₽</td>
+  `;
+    statsTableBody.appendChild(tr);
+}
+
+// Инициализация первых 5 строк
+for (let i = 0; i < 5; i++) {
+    appendRow(generateRandomRow());
+}
+
+// Каждые 2 секунды обновляем
+setInterval(() => {
+    // Удаляем первую строку
+    if (statsTableBody.children.length > 0) {
+        statsTableBody.removeChild(statsTableBody.children[0]);
+    }
+    // Добавляем новую строку
+    appendRow(generateRandomRow());
+}, 2000);

@@ -160,11 +160,12 @@ body::before {
     flex: 1;
     display: flex;
     justify-content: center;
-    padding-right: 20px;
+    padding-right: 56px;
+
 }
 
 .logo {
-    max-height: 60px;
+
     height: auto;
 }
 
@@ -323,7 +324,7 @@ body::before {
 
 
 .slot-picker {
-    margin-top: 80px;
+    margin-top: 30px;
     display: flex;
     justify-content: center;
     width: 100%;
@@ -629,7 +630,7 @@ body::before {
 .rules-box {
     width: 350px;
     height: 100px;
-    margin: 20px auto 0;
+    margin: 0px auto 0;
     background: url('../assets/fon.webp') center/cover no-repeat; /* Задний фон */
     border-radius: 12px;
     display: flex;
@@ -648,3 +649,63 @@ body::before {
     transition: opacity 0.5s ease;
 }
 
+/* Обертка блока */
+#statsTableWrapper {
+    max-width: 800px;
+    margin: 40px auto;
+    border: 1px solid #333;
+    border-radius: 8px;
+    background-color: rgba(0,0,0,0.5);
+    box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    overflow: hidden;
+    font-family: Inter, Arial, sans-serif;
+}
+
+/* Заголовок блока */
+#statsTitle {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 600;
+    padding: 15px 0;
+    border-bottom: 1px solid #444;
+    color: #fff;
+}
+
+/* Таблица */
+#statsTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Заголовок таблицы */
+#statsTable thead tr {
+    background-color: rgba(255,255,255,0.1);
+}
+
+#statsTable th {
+    padding: 10px;
+    text-align: center;
+    font-weight: 500;
+    color: #ddd;
+    font-size: 14px;
+    border-bottom: 1px solid #444;
+}
+
+/* Тело таблицы */
+#statsTable td {
+    padding: 10px;
+    color: #eee;
+    font-size: 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+/* Чередование строк */
+#statsTable tr:nth-child(even) {
+    background-color: rgba(255,255,255,0.03);
+}
+
+/* При наведении */
+#statsTable tr:hover {
+    background-color: rgba(255,255,255,0.08);
+    transition: background-color 0.2s ease;
+}
