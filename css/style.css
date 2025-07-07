@@ -691,6 +691,18 @@ body::before {
     border-bottom: 1px solid #444;
 }
 
+#statsTable td:nth-child(2) {
+    font-weight: 600;
+    color: #ffffff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 180px; /* Можно регулировать ширину по вкусу */
+}
+#statsTable td:nth-child(4) {
+    font-size: 12px;
+}
+
 /* Тело таблицы */
 #statsTable td {
     padding: 10px;
