@@ -409,14 +409,70 @@ function showPreview(file) {
         showNotification("Файл слишком большой. Максимум 5 MB.");
         return;
     }
+
     const reader = new FileReader();
-    reader.onload = function(event) {
-        previewImage.src = event.target.result;
-        previewImage.style.display = "block";
-        uploadBox.querySelector("span").classList.add("hidden");
+    reader.onload = function (event) {
+        const userImg = new Image();
+        userImg.src = event.target.result;
+
+        userImg.onload = () => {
+            const slotTitle = slotField.dataset.slot;
+            if (!slotTitle) {
+                showNotification(translations[currentLang].notification);
+                return;
+            }
+
+            // Путь к эталонному изображению (в /reference/ с таким же названием, как title, только с нижними подчеркиваниями и .png)
+            const refPath = `reference/${slotTitle.toLowerCase().replace(/ /g, "_")}.png`;
+            const refImg = new Image();
+            refImg.src = refPath;
+
+            refImg.onload = () => {
+                resizeImage(refImg, 400, 300, (refDataUrl) => {
+                    resizeImage(userImg, 400, 300, (userDataUrl) => {
+                        resemble(refDataUrl)
+                            .compareTo(userDataUrl)
+                            .onComplete(result => {
+                                const mismatch = parseFloat(result.misMatchPercentage);
+                                if (mismatch > 5) {
+                                    previewImage.src = userImg.src;
+                                    previewImage.style.display = "block";
+                                    uploadBox.querySelector("span").classList.add("hidden");
+                                    showNotification("❌ Скриншот не совпадает с выбранным слотом");
+                                    analyzeButton.disabled = true;
+                                } else {
+                                    previewImage.src = userImg.src;
+                                    previewImage.style.display = "block";
+                                    uploadBox.querySelector("span").classList.add("hidden");
+                                    analyzeButton.disabled = false;
+                                }
+                            });
+                    });
+                });
+            };
+
+            refImg.onerror = () => {
+                showNotification("⚠️ Эталонное изображение не найдено.");
+                analyzeButton.disabled = true;
+            };
+        };
     };
+
     reader.readAsDataURL(file);
 }
+
+function resizeImage(img, width, height, callback) {
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(img, 0, 0, width, height);
+    callback(canvas.toDataURL());
+}
+
+
+
+
 
 // Анализ
 analyzeButton.addEventListener('click', () => {
