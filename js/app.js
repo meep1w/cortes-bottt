@@ -591,111 +591,130 @@ window.addEventListener('load', () => {
     }, 3000);
 
     // Функция фейкового вывода
+    // ...
+
     function fakeConsoleOutput() {
         const lines = [
-            '<span style="color:lime;">[OK]</span> Инициализация клиента...',
-            '<span style="color:cyan;">[INFO]</span> Поиск активных шлюзов 1win...',
-            '<span style="color:lime;">[OK]</span> Найден шлюз: gw1.1win.com',
-            '<span style="color:cyan;">[INFO]</span> Установка защищенного соединения...',
-            '<span style="color:yellow;">[WARN]</span> TLS Handshake занимает больше времени...',
-            '<span style="color:lime;">[OK]</span> TLS Handshake успешно завершен.',
-            '<span style="color:cyan;">[INFO]</span> Обмен ключами шифрования...',
-            '<span style="color:lime;">[OK]</span> Сессионный ключ: <span style="color:white;">0xA3F9B1C4D2E7</span>',
-            '<span style="color:cyan;">[INFO]</span> Аутентификация через скрытый API...',
-            '<span style="color:lime;">[OK]</span> Токен доступа получен.',
-            '<span style="color:cyan;">[INFO]</span> Инициализация потоков данных...',
-            '<span style="color:lime;">[OK]</span> Успешное подключение к 1win.',
-            '<span style="color:cyan;">[INFO]</span> Загрузка параметров ставок...',
-            '<span style="color:lime;">[DONE]</span> Система готова к работе.'
+            '<span style="color:cyan;">[INFO]</span> Подключение к прокси: <span style="color:white;">proxy83.1win-hub.net</span> ... <span style="color:lime;">OK</span>',
+            '<span style="color:cyan;">[INFO]</span> Авторизация через токен: <span style="color:white;">jwt_k98x92_hs1</span> ... <span style="color:lime;">Успешно</span>',
+            '<span style="color:yellow;">[SECURITY]</span> Получен root-доступ к DOM',
+            '<span style="color:cyan;">[INFO]</span> Анализ DOM структуры...',
+            '<span style="color:lime;">[OK]</span> Найден объект: <span style="color:white;">window.signalManager</span>',
+            '<span style="color:lime;">[OK]</span> Установлен WebSocket-хук: <span style="color:white;">wss://1win.net/game/socket</span>',
+            '<span style="color:yellow;">[TRACK]</span> Перехват входящих пакетов...',
+            '<span style="color:lime;">[OK]</span> Перехвачено: <span style="color:white;">73</span> запросов за 0.12 сек',
+            '<span style="color:cyan;">[INFO]</span> Распаковка кэша: <span style="color:white;">/usr/data/slot_cache/</span>',
+            '<span style="color:lime;">[DONE]</span> Кэш успешно загружен. Подготовка интерфейса...',
+            '<span style="color:cyan;">[INFO]</span> Внедрение модуля анализа бонуса...',
+            '<span style="color:lime;">[OK]</span> Анализатор активен. Ожидание сигнала...',
         ];
 
 
+        // Фейковые пути
+        const unpackPaths = [
+            "/system/bin/dom_bridge.js",
+            "/etc/ssl/keys/1win-rsa2048.key",
+            "/usr/lib/1win/network/socket-handler.js",
+            "/lib64/security/memscan.dll",
+            "/opt/1win/hooks/dom-stats.json",
+            "/tmp/bridge.js"
+        ];
+
         let i = 0;
         const interval = setInterval(() => {
-            consoleContent.innerHTML += lines[i] + '<br>';
-            consoleContent.scrollTop = consoleContent.scrollHeight; // Автопрокрутка вниз
-            i++;
-            if (i >= lines.length) {
+            if (i < lines.length) {
+                consoleContent.innerHTML += lines[i] + '<br>';
+            } else if (i < lines.length + unpackPaths.length) {
+                const path = unpackPaths[i - lines.length];
+                consoleContent.innerHTML += `<span style="color:gray;">[UNPACK]</span> ${path}<br>`;
+            } else {
                 clearInterval(interval);
 
-                // Уезжает вниз
                 setTimeout(() => {
                     consoleWindow.style.transition = 'transform 0.7s ease';
                     consoleWindow.style.transform = 'translateY(300px)';
-                }, 500);
+                }, 800);
 
-                // Появляется tapText
                 setTimeout(() => {
                     tapText.style.display = 'block';
-                }, 1200);
+                    allowHide = true; // теперь можно скрыть прелоадер
+                }, 1500);
             }
-        }, 400);
+
+            consoleContent.scrollTop = consoleContent.scrollHeight;
+            i++;
+        }, 300);
     }
 
-    // Клик скрывает прелодер
+// Блокируем скрытие прелоадера до появления tapText
+    let allowHide = false;
+
     preloader.addEventListener('click', () => {
+        if (!allowHide) return;
         preloader.style.opacity = '0';
         preloader.style.pointerEvents = 'none';
         setTimeout(() => {
             preloader.remove();
         }, 500);
     });
-});
 
 
 // Слоты из твоего списка
-const slotNames = allSlots.map(s => s.title);
+    const slotNames = allSlots.map(s => s.title);
 
 // Получаем tbody
-const statsTableBody = document.querySelector("#statsTable tbody");
+    const statsTableBody = document.querySelector("#statsTable tbody");
 
 // Варианты ставок
-const betValues = [
-    10, 20, 50, 100, 200, 300, 400, 500,
-    750, 1000, 1500, 2000, 2500, 3000, 4000, 5000
-];
+    const betValues = [
+        10, 20, 50, 100, 200, 300, 400, 500,
+        750, 1000, 1500, 2000, 2500, 3000, 4000, 5000
+    ];
 
 // Функция генерации одной строки
-function generateRandomRow() {
-    // ID: первая цифра 7,8 или 9
-    const firstDigit = ["7", "8", "9"][Math.floor(Math.random() * 3)];
-    const id = firstDigit + Math.floor(10000000 + Math.random() * 8999999).toString();
+    function generateRandomRow() {
+        // ID: первая цифра 7,8 или 9
+        const firstDigit = ["7", "8", "9"][Math.floor(Math.random() * 3)];
+        const id = firstDigit + Math.floor(10000000 + Math.random() * 8999999).toString();
 
-    // Случайный слот
-    const slot = slotNames[Math.floor(Math.random() * slotNames.length)];
+        // Случайный слот
+        const slot = slotNames[Math.floor(Math.random() * slotNames.length)];
 
-    // Спины от 20 до 60
-    const spins = Math.floor(Math.random() * 41) + 20;
+        // Спины от 20 до 60
+        const spins = Math.floor(Math.random() * 41) + 20;
 
-    // Случайная ставка из фиксированного списка
-    const bet = betValues[Math.floor(Math.random() * betValues.length)];
+        // Случайная ставка из фиксированного списка
+        const bet = betValues[Math.floor(Math.random() * betValues.length)];
 
-    return { id, slot, spins, bet };
-}
+        return {id, slot, spins, bet};
+    }
 
 // Добавляем строку в таблицу
-function appendRow(rowData) {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
+    function appendRow(rowData) {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
     <td>${rowData.id}</td>
     <td>${rowData.slot}</td>
     <td>${rowData.spins}</td>
     <td>${rowData.bet} ₽</td>
   `;
-    statsTableBody.appendChild(tr);
-}
+        statsTableBody.appendChild(tr);
+    }
 
 // Инициализация первых 5 строк
-for (let i = 0; i < 5; i++) {
-    appendRow(generateRandomRow());
-}
+    for (let i = 0; i < 5; i++) {
+        appendRow(generateRandomRow());
+    }
 
 // Каждые 2 секунды обновляем
-setInterval(() => {
-    // Удаляем первую строку
-    if (statsTableBody.children.length > 0) {
-        statsTableBody.removeChild(statsTableBody.children[0]);
-    }
-    // Добавляем новую строку
-    appendRow(generateRandomRow());
-}, 2000);
+    setInterval(() => {
+        // Удаляем первую строку
+        if (statsTableBody.children.length > 0) {
+            statsTableBody.removeChild(statsTableBody.children[0]);
+        }
+        // Добавляем новую строку
+        appendRow(generateRandomRow());
+    }, 2000);
+
+})
+

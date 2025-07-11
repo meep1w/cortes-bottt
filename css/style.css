@@ -29,8 +29,9 @@
 }
 
 #consoleWindow {
-    width: 500px;         /* было меньше, сделай больше */
-    height: 300px;        /* увеличь по высоте */
+    width: 90vw;
+    max-width: 600px;
+    max-height: 70vh;        /* увеличь по высоте */
     background: #000;
     color: #fff;
     font-family: monospace;
@@ -39,7 +40,10 @@
     padding: 10px;
     overflow-y: auto;     /* прокрутка, если не влезает */
     margin: 0 auto;
-    display: none;        /* по умолчанию скрыт */
+    display: none;
+    border: 2px solid #ff0000;
+    border-radius: 10px;
+    box-shadow: 0 0 30px #750000;/* по умолчанию скрыт */
 }
 
 
